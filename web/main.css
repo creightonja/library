@@ -1,0 +1,50 @@
+body {
+    background: #455A64;
+    overflow: auto;
+    color: #263238;
+}
+
+.container {
+    background: white;
+    border-radius: 2px;
+    height: 100%;
+}
+
+h1 {
+    margin: 40px;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    background: #455A64;
+    padding: 40px;
+    margin: 30px;
+    margin-bottom: 80px;
+    border-radius: 20px;
+    color: white;
+}
+
+h2 small {
+    padding: 30px;
+}
+
+.submit_form {
+    margin-top: 20px;
+}
+
+h1 span {
+    background: #c7f99d;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.btn {
+    background: #67808B;
+    color: white;
+}
+
+.tc a {
+    text-decoration: none;
+    color: white;
+}
