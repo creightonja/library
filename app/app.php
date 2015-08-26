@@ -1,0 +1,162 @@
+<?php
+    //Loading class functionality
+    require_once __DIR__."/../vendor/autoload.php";
+    require_once __DIR__."/../src/Book.php";
+    require_once __DIR__."/../src/Author.php";
+    require_once __DIR__."/../src/BookList.php";
+
+
+    //Silex preloads
+    $app = new Silex\Application();
+    $app['debug'] = true;
+
+    //PDO setup
+    $server = 'mysql:host=localhost;dbname=library';
+    $username = 'root';
+    $password = 'root';
+    $DB = new PDO($server, $username, $password);
+
+    //***************************************************************************
+    //***************************************************************************
+
+    //ATTN: OUR DATABASE LAYOUT IS A BIT DIFFERENT. PLEASE REFER TO THE PDF FILE
+    //NAMED "Database flowchart library.pdf" TO VIEW HOW IT IS LAID OUT.
+
+    //***************************************************************************
+    //***************************************************************************
+
+
+    //Patch and delete functions from symfony
+    use Symfony\Component\HttpFoundation\Request;
+    Request::enableHttpMethodParameterOverride();
+
+
+    //Use silex to load page and twig path
+    $app->register(new Silex\Provider\TwigServiceProvider(), array(
+                    'twig.path' => __DIR__.'/../views'
+    ));
+
+    //Index page rendering links to authors and books
+    $app->get("/", function() use ($app) {
+        return $app['twig']->render('index.html.twig', array('authors' => Author::getAll(), 'books' => Book::getAll()));
+    });
+
+    //---------------------Begin Book Functionality------------------
+
+    //Books page, lists, add, edit, or delete a book links.
+    $app->get("/books", function() use ($app) {
+        return $app['twig']->render('books.html.twig', array('books' => Book::getAll()));
+    });
+
+    //Adds a new book to DB, renders to books.html
+    $app->post("/books", function() use ($app) {
+        $book_name = $_POST['book_name'];
+        $book = new Book($book_name, $id=null);
+        $book->save();
+        return $app['twig']->render('books.html.twig', array('books' => Book::getAll()));
+    });
+
+    //Showing a book's schedule of authors.  Renders to particular book's page with crud function
+    $app->get("/books/{id}", function($id) use ($app) {
+        $book = Book::find($id);
+        return $app['twig']->render('book.html.twig', array('book' => $book, 'authors' => $book->getAuthors(), 'all_authors' => Author::getAll()));
+    });
+
+    //Adds authors to books in the book.html file.
+    $app->post("/add_author", function() use ($app) {
+        $author = Author::find($_POST['author_id']);
+        $book = Book::find($_POST['book_id']);
+        $book->addAuthor($author);
+        return $app['twig']->render('book.html.twig', array('book' => $book, 'books' => Book::getAll(), 'authors' => $book->getAuthors(), 'all_authors' => Author::getAll()));
+    });
+
+    //Updates book, comes from book.html, posts back to books.html with updated book info
+    $app->patch("/book/{id}/edit", function($id) use ($app){
+        $new_book_name = $_POST['new_book_name'];
+        $book = Book::find($id);
+        $book->update($new_book_name);
+        return $app['twig']->render('books.html.twig', array('books' => Book::getAll()));
+    });
+
+    //Deletes book, comes from book.html, posts back to books.html minus deleted book
+    $app->get("/book/{id}/delete", function($id) use ($app) {
+        $book = Book::find($id);
+        $book->deleteOne();
+        return $app['twig']->render('books.html.twig', array('books' => Book::getAll()));
+    });
+
+    //Delete All Books from DB
+    $app->post("/delete_books", function() use ($app) {
+        Book::deleteAll();
+        return $app['twig']->render('index.html.twig');
+    });
+
+// -------------------------End Book Routes -------------------------
+
+
+// -------------------------Begin Author Routes -------------------------
+
+
+
+    //Main authors page, displays all authors.
+    $app->get("/authors", function() use ($app) {
+        return $app['twig']->render('authors.html.twig', array('authors' => Author::getAll()));
+    });
+
+    //Adds a new author to authors table.
+    $app->post("/author", function() use ($app) {
+        $id = null;
+        $author = new Author($_POST['author_name'], $id);
+        $author->save();
+        return $app['twig']->render('authors.html.twig', array('authors' => Author::getAll()));
+    });
+
+    //Listing all books for a selected author. Check all_books variable for error issue
+    $app->get("/authors/{id}", function($id) use ($app) {
+        $author = Author::find($id);
+        return $app['twig']->render('author.html.twig', array('author' => $author, 'books' => $author->getBooks(), 'all_books' => Book::getAll()));
+    });
+
+    //Linking book to a authors on the author page
+    $app->post("/add_book", function() use ($app) {
+        $author = Author::find($_POST['author_id']);
+        $book = Book::find($_POST['book_id']);
+        $author->addBook($book);
+        return $app['twig']->render('author.html.twig', array('author' => $author, 'authors' => Author::getAll(), 'books' => $author->getBooks(), 'all_books' => Book::getAll()));
+    });
+
+    //Deletes all authors, do not use :P
+    $app->post("/delete_authors", function() use ($app) {
+        Author::deleteAll();
+        return $app['twig']->render('index.html.twig');
+    });
+
+    //Updates author, comes from author.html, posts back to authors.html
+    $app->patch("/author/{id}/edit", function($id) use ($app){
+        $new_author_name = $_POST['new_author_name'];
+        $author = Author::find($id);
+        $author->update($new_author_name);
+        return $app['twig']->render('authors.html.twig', array('authors' => Author::getAll()));
+    });
+
+    //Deletes author, comes from author.html, posts back to authors.html
+    $app->get("/author/{id}/delete", function($id) use ($app) {
+        $author = Author::find($id);
+        $author->deleteOne();
+        return $app['twig']->render('authors.html.twig', array('authors' => Author::getAll()));
+    });
+
+    //-------------------------------BookList functionality Begin -----------------------
+
+    //Generating a list of matching books from booklist with authorId and bookId inputs.
+    $app->get("/booklist/{authorId}/{bookId}", function($authorId, $bookId) use ($app) {
+        $author = Author::find($authorId);
+        $author_id = $author->getId();
+        $book = Book::find($bookId);
+        $book_id = $book->getId();
+        $book_list = BookList::findBookList($author_id, $book_id);
+        return $app['twig']->render('booklist.html.twig', array('book_list' => $book_list, 'book' => $book, 'author' => $author));
+    });
+
+    return $app;
+?>

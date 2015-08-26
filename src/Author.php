@@ -1,7 +1,5 @@
 <?php
 
-    require_once "Book.php";
-
     class Author {
 
         private $author_name;
@@ -42,8 +40,7 @@
                 $returned_book = $result->fetchAll(PDO::FETCH_ASSOC);
                 $book_name = $returned_book[0]['book_name'];
                 $id = $returned_book[0]['id'];
-                $enroll_date = $returned_book[0]['enroll_date'];
-                $new_book = new Book($book_name, $enroll_date, $id);
+                $new_book = new Book($book_name, $id);
                 array_push($books, $new_book);
             }
             return $books;

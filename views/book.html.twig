@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/../main.css">
+        <title>Library Database</title>
+    </head>
+    <body>
+        <div class="container">
+            <h2>{{ book.getBookName }}</h2>
+
+            {% if authors is not empty %}
+            <p>Here are the authors for this book:</p>
+            <ul class="list-group">
+                {% for author in authors %}
+                    <li class="list-group-item"><a href="/booklist/{{ author.getId }}/{{ book.getId }}">{{ author.getAuthorName }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <h4>Add a author to this book:</h4>
+            <div class="form-group">
+                <form action="/add_author" method="post">
+                    <input type="hidden" name="book_id" id ="book_id" value="{{ book.getId }}">
+                    <label for="author_id">Select an Author</label>
+                    <select id="author_id" name="author_id" type="text">
+                        {% for author in all_authors %}
+                            <option value="{{ author.getId }}"> {{ author.getAuthorName }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-default" type="submit">Add Author</button>
+                </form>
+            </div>
+
+            <h4>Edit this book:</h4>
+            <div class="form-group">
+                <form action='/book/{{ book.getId }}/edit' method='post'>
+                    <input name="_method" type="hidden" value="patch">
+                    <label for='new_book_name'>Book Name</label>
+                    <input id='new_book_name' name='new_book_name' type='text'>
+                    <button class="btn btn-default" type='submit'>Edit Book</button>
+
+                    <a href='/book/{{ book.getId }}/delete'>Delete Book</a>
+                </form>
+            </div>
+            <p><a href='/books'>Books</a></p>

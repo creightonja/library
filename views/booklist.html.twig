@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/../main.css">
+        <title>Library Database</title>
+    </head>
+    <body>
+        <div class="container">
+            <h2>{{ book.getBookName }} by {{ author.getAuthorName }}</h2>
+            <ul class="list-group">
+            {% for thebook in book_list %}
+                <li class="list-group-item"> Book Copy ID: {{ thebook.getId }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </body>
+</html>

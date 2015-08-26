@@ -1,7 +1,5 @@
 <?php
 
-require_once "src/Book.php";
-require_once "src/Author.php";
 
 class BookList {
 
@@ -69,21 +67,54 @@ class BookList {
         return $book_list;
     }
 
+    //Searching book_list database with column_id as a variable
     static function find($column_id, $search_id) {
         //$column_id is what the user is search for ie due_date, book_id, etc
-        $search_book_list = $GLOBALS['DB']->query("SELECT * FROM book_list WHERE {$column_id} = {$search_id}");
+        //if $search_id is a date, it will be a string, else it will be an int
+        if (is_string($search_id)) {
+            $search_book_list = $GLOBALS['DB']->query("SELECT * FROM book_list WHERE {$column_id} = '{$search_id}'");
+        }
+        else {
+            $search_book_list = $GLOBALS['DB']->query("SELECT * FROM book_list WHERE {$column_id} = {$search_id}");
+        }
+        $found_books = array();
         $found_book = $search_book_list->fetchAll(PDO::FETCH_ASSOC);
-        $author_id = $found_book[0]['author_id'];
-        $book_id = $found_book[0]['book_id'];
-        $due_date = $found_book[0]['due_date'];
-        $checkout_patron_id = $found_book[0]['checkout_patron_id'];
-        $id = $found_book[0]['id'];
-        $new_book = new BookList($author_id, $book_id, $due_date, $checkout_patron_id, $id);
-        return $new_book;
+        foreach ($found_book as $book){
+            $author_id = $book['author_id'];
+            $book_id = $book['book_id'];
+            $due_date = $book['due_date'];
+            $checkout_patron_id = $book['checkout_patron_id'];
+            $id = $book['id'];
+            $new_book = new BookList($author_id, $book_id, $due_date, $checkout_patron_id, $id);
+            array_push($found_books, $new_book);
+        }
+        //returned output is in an array incase there is more than one book found. I.E. due date being searched and finds more than one book with that due date
+        return $found_books;
+    }
+
+    //Searching book_list database for specific book with author and book id inputs
+    static function findBookList($id1, $id2) {
+        $search_book_list = $GLOBALS['DB']->query("SELECT * FROM book_list WHERE author_id = {$id1} AND book_id = {$id2}");
+        $found_books = array();
+        $found_book = $search_book_list->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($found_book as $book){
+            $author_id = $book['author_id'];
+            $book_id = $book['book_id'];
+            $due_date = $book['due_date'];
+            $checkout_patron_id = $book['checkout_patron_id'];
+            $id = $book['id'];
+            $new_book = new BookList($author_id, $book_id, $due_date, $checkout_patron_id, $id);
+            array_push($found_books, $new_book);
+        }
+        return $found_books;
     }
 
     static function deleteAll(){
         $GLOBALS['DB']->exec("DELETE FROM book_list;");
+    }
+
+    static function overDueBooks () {
+
     }
 }
 
