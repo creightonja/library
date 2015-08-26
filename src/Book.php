@@ -31,7 +31,6 @@ class Book {
     }
 
     //Get all authors assigned to a book:
-    //This method is UNFINISHED.
     function getAuthors() {
         //join statement
         $found_authors = $GLOBALS['DB']->query("SELECT authors.* FROM
