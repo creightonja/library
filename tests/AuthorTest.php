@@ -7,6 +7,8 @@
 
     //Linking class for testing
     require_once "src/Author.php";
+    require_once "src/Book.php";
+
 
     //Setting server up to apache and mysql passwords.
     $server = 'mysql:host=localhost;dbname=library_test';
@@ -19,6 +21,22 @@
         //Clears data for next test after each test:
         protected function tearDown() {
             Author::deleteAll();
+            Book::deleteAll();
+        }
+
+        function testSetAuthorName()
+        {
+            //Arrange
+            $author_name = "Stephen King";
+            $id = 1;
+            $test_author = new Author($author_name, $id);
+
+            //Act
+            $test_author->setAuthorName("Plato");
+            $result = $test_author->getAuthorName();
+
+            //Assert
+            $this->assertEquals("Plato", $result);
         }
 
         //Test getters:
@@ -37,20 +55,6 @@
             $this->assertEquals($result, $author_name);
         }
 
-        function testSetAuthorName()
-        {
-            //Arrange
-            $author_name = "Stephen King";
-            $id = 1;
-            $test_author = new Author($author_name, $id);
-
-            //Act
-            $test_author->setAuthorName("Plato");
-            $result = $test_author->getAuthorName();
-
-            //Assert
-            $this->assertEquals("Plato", $result);
-        }
 
         function test_getId() {
 
@@ -117,7 +121,7 @@
             //Assert
             $this->assertEquals([$test_author2], Author::getAll());
         }
-        
+
         //Test getAll:
         function test_getAll() {
             //Arrange
@@ -155,6 +159,24 @@
 
             //Assert
             $this->assertEquals($test_author, $result);
+        }
+
+        function test_getBooks() {
+            $title = "War and Peace";
+            $id = null;
+            $test_book = new Book($title, $id);
+            $test_book->save();
+
+            $author_name2 = "Plato";
+            $test_author2 = new Author($author_name2, $id);
+            $test_author2->save();
+
+            //Act
+            $test_author2->addBook($test_book);
+            $result = $test_author2->getBooks();
+
+            //Assert
+            $this->assertEquals([$test_book], $result);
         }
 
 

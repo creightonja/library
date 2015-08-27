@@ -92,6 +92,23 @@ class BookList {
         return $found_books;
     }
 
+    static function findOne($search_id){
+        $search_book_list = $GLOBALS['DB']->query("SELECT * FROM book_list WHERE id = {$search_id}");
+        $found_books = array();
+        $found_book = $search_book_list->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($found_book as $book){
+            $author_id = $book['author_id'];
+            $book_id = $book['book_id'];
+            $due_date = $book['due_date'];
+            $checkout_patron_id = $book['checkout_patron_id'];
+            $id = $book['id'];
+            $new_book = new BookList($author_id, $book_id, $due_date, $checkout_patron_id, $id);
+            array_push($found_books, $new_book);
+        }
+        //returned output is in an array incase there is more than one book found. I.E. due date being searched and finds more than one book with that due date
+        return $found_books;
+    }
+
     //Searching book_list database for specific book with author and book id inputs
     static function findBookList($id1, $id2) {
         $search_book_list = $GLOBALS['DB']->query("SELECT * FROM book_list WHERE author_id = {$id1} AND book_id = {$id2}");

@@ -1,9 +1,13 @@
 <?php
+
+// on checkout.html.tiwg: <h2>{{ book.getBookName }}</h2>
+
     //Loading class functionality
     require_once __DIR__."/../vendor/autoload.php";
     require_once __DIR__."/../src/Book.php";
     require_once __DIR__."/../src/Author.php";
     require_once __DIR__."/../src/BookList.php";
+    require_once __DIR__."/../src/Patron.php";
 
 
     //Silex preloads
@@ -41,7 +45,7 @@
         return $app['twig']->render('index.html.twig', array('authors' => Author::getAll(), 'books' => Book::getAll()));
     });
 
-    //---------------------Begin Book Functionality------------------
+    //---------------------Begin Book Search Functionality------------------
 
     //Books page, lists, add, edit, or delete a book links.
     $app->get("/books", function() use ($app) {
@@ -149,15 +153,34 @@
     //-------------------------------BookList functionality Begin -----------------------
 
     //Generating a list of matching books from booklist with authorId and bookId inputs.
-    //Comes from book.html or author.html.  
+    //Comes from book.html or author.html.
     $app->get("/booklist/{authorId}/{bookId}", function($authorId, $bookId) use ($app) {
         $author = Author::find($authorId);
         $author_id = $author->getId();
         $book = Book::find($bookId);
         $book_id = $book->getId();
         $book_list = BookList::findBookList($author_id, $book_id);
-        return $app['twig']->render('booklist.html.twig', array('book_list' => $book_list, 'book' => $book, 'author' => $author));
+        return $app['twig']->render('booklist.html.twig', array('book_list' => $book_list, 'book' => $book, 'author' => $author, 'patrons' => Patron::getAll()));
     });
 
+    $app->get("booklist/{bookId}/out/", function ($bookId) use ($app) {
+        $column_id = 'book_id';
+        $books = BookList::find($column_id, $bookId);
+        $patrons = Patron::getAll();
+        return $app['twig']->render('checkout.html.twig', array('book' => $books[0], 'patrons' => $patrons));
+    });
+
+
+    //----------------------------Add a Book functionality Begin -------------------------
+
+    //Redirect for add a book page.
+    $app->get("/addbook", function() use ($app) {
+        return $app['twig']->render('addbook.html.twig');
+    });
+
+
+
+
+    //End of app
     return $app;
 ?>

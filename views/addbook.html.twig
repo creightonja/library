@@ -6,35 +6,22 @@
     </head>
     <body>
         <div class="container">
-            <h2>Books</h2>
+            <h2>Add a Book to the Library</h2>
             <ul class="nav nav-tabs" style="margin-bottom: 30px;">
                 <li role="presentation"><a href="/">Home</a></li>
                 <li role="presentation"><a href="/authors">Author Search</a></li>
-                <li role="presentation" class="active"><a href="/books">Book Search</a></li>
-                <li role="presentation"><a href="/addbook">Add a Book</a></li>
+                <li role="presentation"><a href="/books">Book Search</a></li>
+                <li role="presentation" class="active"><a href="/addbook">Add a Book</a></li>
             </ul>
-            {% if books is not empty %}
-                <p>Here are all your Books:</p>
-                <ul class="list-group">
-                    {% for book in books %}
-                        <li class="list-group-item"><a href="/books/{{ book.getId }}">{{ book.getBookName }}</a> </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
             <div class="form-group">
                 <form action='/books' method='post'>
                     <label for='book_name'>Book Name</label>
                     <input id='book_name' name='book_name' type='text'>
+                    <label for='author_name'>Author Name</label>
+                    <input id='author_name' name='author_name' type='text'>
                     <button class="btn btn-default" type='submit'>Add Book</button>
                 </form>
             </div>
-
-            <div class="form-group">
-                <form action='/delete_books' method='post'>
-                    <button class="btn btn-default" type='submit'>Clear</button>
-                </form>
-            </div>
-
                 <p><a href='/'>Home</a></p>
         </div>
     </body>

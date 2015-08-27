@@ -47,7 +47,8 @@
         }
 
         function update($new_author_name) {
-             $GLOBALS['DB']->exec("UPDATE authors set author_name = '{$new_author_name}' WHERE id = {$this->getId()};");
+             $GLOBALS['DB']->exec("UPDATE authors set author_name = '{$new_author_name}'
+                    WHERE id = {$this->getId()};");
              $this->setAuthorName($new_author_name);
          }
 

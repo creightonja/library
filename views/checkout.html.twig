@@ -1,0 +1,37 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/../main.css">
+    <title>Library Database</title>
+</head>
+<body>
+    <div class="container">
+
+        <h2>Checkout</h2>
+
+        <ul class="nav nav-tabs" style="margin-bottom: 30px;">
+            <li role="presentation"><a href="/">Home</a></li>
+            <li role="presentation" class="active"><a href="/authors">Author Search</a></li>
+            <li role="presentation"><a href="/books">Book Search</a></li>
+            <li role="presentation"><a href="/addbook">Add a Book</a></li>
+        </ul>
+
+
+        <div class="form-group">
+            <form action='/booklist/{{book.getAuthorId}}/{{book.getId}}' method='post'>
+                <input name="_method" type="hidden" value="patch">
+                <input id="author_id" name="author_id" type="hidden" value="{{ book.getId }}">
+                <label for='due_date'>Due Date</label>
+                <input id='due_date' name='due_date' type='date'>
+                <label for="patron_id">Which Patron</label>
+                <select id='patron_id' name='patron_id' type='text'>
+                    {% for patron in patrons %}
+                        <option value="{{ patron.getId }}"> {{ patron.getPatronName }} </option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-default" type='submit'>Checkout</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
