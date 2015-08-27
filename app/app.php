@@ -163,6 +163,18 @@
         return $app['twig']->render('booklist.html.twig', array('book_list' => $book_list, 'book' => $book, 'author' => $author, 'patrons' => Patron::getAll()));
     });
 
+    $app->patch("/booklist/{authorId}/{bookId}", function($authorId, $bookId) use ($app) {
+        $update_book = BookList::find('id', $_POST['booklist_id']);
+        var_dump($update_book[0]);
+        $update_book[0]->update($_POST['due_date'], $_POST['patron_id']);
+        $author = Author::find($authorId);
+        $author_id = $author->getId();
+        $book = Book::find($bookId);
+        $book_id = $book->getId();
+        $book_list = BookList::findBookList($author_id, $book_id);
+        return $app['twig']->render('booklist.html.twig', array('book_list' => $book_list, 'book' => $book, 'author' => $author, 'patrons' => Patron::getAll()));
+    });
+
     $app->get("booklist/{bookId}/out/", function ($bookId) use ($app) {
         $column_id = 'book_id';
         $books = BookList::find($column_id, $bookId);
@@ -174,8 +186,17 @@
     //----------------------------Add a Book functionality Begin -------------------------
 
     //Redirect for add a book page.
-    $app->get("/addbook", function() use ($app) {
-        return $app['twig']->render('addbook.html.twig');
+    $app->get("/add", function() use ($app) {
+        $patrons = Patron::getAll();
+        return $app['twig']->render('add.html.twig', array('patrons' => $patrons));
+    });
+
+    $app->post("/add", function() use ($app) {
+        $patron_name = $_POST['patron_name'];
+        $new_patron = new Patron($patron_name);
+        $new_patron->save();
+        $patrons = Patron::getAll();
+        return $app['twig']->render('add.html.twig', array('patrons' => $patrons));
     });
 
 

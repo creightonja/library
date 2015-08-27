@@ -52,6 +52,15 @@ class BookList {
         $this->id = $GLOBALS['DB']->lastInsertId();
     }
 
+    function update($new_due_date, $new_checkout_patron_id) {
+        $GLOBALS['DB']->exec("UPDATE book_list SET
+                            due_date = '{$new_due_date}',
+                            checkout_patron_id = {$new_checkout_patron_id}
+                            WHERE id = {$this->getId()};");
+        $this->setDueDate($new_due_date);
+        $this->setCheckoutPatronId($new_checkout_patron_id);
+    }
+
     static function getAll(){
         $returned_book_list = $GLOBALS['DB']->query("SELECT * FROM book_list;");
         $book_list = array();

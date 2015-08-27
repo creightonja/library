@@ -13,14 +13,14 @@
             <li role="presentation"><a href="/">Home</a></li>
             <li role="presentation" class="active"><a href="/authors">Author Search</a></li>
             <li role="presentation"><a href="/books">Book Search</a></li>
-            <li role="presentation"><a href="/addbook">Add a Book</a></li>
+            <li role="presentation"><a href="/add">Add a Book/Patron</a></li>
         </ul>
 
 
         <div class="form-group">
             <form action='/booklist/{{book.getAuthorId}}/{{book.getId}}' method='post'>
                 <input name="_method" type="hidden" value="patch">
-                <input id="author_id" name="author_id" type="hidden" value="{{ book.getId }}">
+                <input id="booklist_id" name="booklist_id" type="hidden" value="{{ book.getId }}">
                 <label for='due_date'>Due Date</label>
                 <input id='due_date' name='due_date' type='date'>
                 <label for="patron_id">Which Patron</label>

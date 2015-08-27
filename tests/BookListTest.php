@@ -430,6 +430,60 @@
             $this->assertEquals([$test_book_list, $test_book_list3], $result);
         }
 
+        function test_updateBookList(){
+            //Arrange
+            $book_name = "Gattica";
+            $book_id = 2;
+            $test_book = new Book($book_name, $book_id);
+            $test_book->save();
+
+            $author_name = "Aristole";
+            $author_id2 = 1;
+            $test_author = new Author($author_name, $author_id2);
+            $test_author->save();
+
+            $book_name = "Battlestar";
+            $book_id = 2;
+            $test_book2 = new Book($book_name, $book_id);
+            $test_book2->save();
+
+            $author_name = "Plato";
+            $author_id2 = 1;
+            $test_author2 = new Author($author_name, $author_id2);
+            $test_author2->save();
+
+            $author_id = $test_author->getId();
+            $book_id = $test_book->getId();
+            $due_date = "2015-08-29";
+            $id = 3;
+            $checkout_patron_id = 1;
+            $test_book_list = new BookList($author_id, $book_id, $due_date, $checkout_patron_id, $id);
+            $test_book_list->save();
+
+            $author_id2 = $test_author2->getId();
+            $book_id2 = $test_book2->getId();
+            $due_date2 = "2015-08-27";
+            $id2 = 4;
+            $checkout_patron_id2 = 2;
+            $test_book_list2 = new BookList($author_id2, $book_id2, $due_date2, $checkout_patron_id2, $id2);
+            $test_book_list2->save();
+
+            $due_date3 = "2015-08-27";
+            $id3 = 5;
+            $checkout_patron_id3 = 3;
+            $test_book_list3 = new BookList($author_id, $book_id, $due_date3, $checkout_patron_id3, $id3);
+            $test_book_list3->save();
+
+            //Act
+            $new_due_date = "2016-07-26";
+            $new_checkout_patron_id = 99;
+            $test_book_list->update($new_due_date, $new_checkout_patron_id);
+            $result = $test_book_list->getCheckoutPatronId();
+
+            //Assert
+            $this->assertEquals($new_checkout_patron_id, $result);
+        }
+
     }//End Class
 
 ?>
