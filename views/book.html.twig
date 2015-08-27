@@ -7,7 +7,11 @@
     <body>
         <div class="container">
             <h2>{{ book.getBookName }}</h2>
-
+            <ul class="nav nav-tabs" style="margin-bottom: 30px;">
+                <li role="presentation"><a href="/">Home</a></li>
+                <li role="presentation"><a href="/authors">Author Search</a></li>
+                <li role="presentation" class="active"><a href="/books">Book Search</a></li>
+            </ul>
             {% if authors is not empty %}
             <p>Here are the authors for this book:</p>
             <ul class="list-group">

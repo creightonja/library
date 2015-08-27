@@ -30,7 +30,7 @@
         }
 
         function getBooks() {
-            $query = $GLOBALS['DB']->query("SELECT book_id FROM book_list WHERE
+            $query = $GLOBALS['DB']->query("SELECT DISTINCT book_id FROM book_list WHERE
                                             author_id = {$this->getId()};");
             $book_ids = $query->fetchAll(PDO::FETCH_ASSOC);
             $books = Array();

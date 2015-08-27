@@ -149,6 +149,7 @@
     //-------------------------------BookList functionality Begin -----------------------
 
     //Generating a list of matching books from booklist with authorId and bookId inputs.
+    //Comes from book.html or author.html.  
     $app->get("/booklist/{authorId}/{bookId}", function($authorId, $bookId) use ($app) {
         $author = Author::find($authorId);
         $author_id = $author->getId();

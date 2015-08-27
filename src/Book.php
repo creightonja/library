@@ -32,8 +32,8 @@ class Book {
 
     //Get all authors assigned to a book:
     function getAuthors() {
-        //join statement
-        $found_authors = $GLOBALS['DB']->query("SELECT authors.* FROM
+        //join statement, retrieves unique values from joined list.
+        $found_authors = $GLOBALS['DB']->query("SELECT DISTINCT authors.* FROM
         books JOIN book_list ON (books.id = book_list.book_id)
                  JOIN authors ON (book_list.author_id = authors.id)
                  WHERE (books.id = {$this->getId()});");
