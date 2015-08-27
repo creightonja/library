@@ -53,12 +53,21 @@ class BookList {
     }
 
     function update($new_due_date, $new_checkout_patron_id) {
-        $GLOBALS['DB']->exec("UPDATE book_list SET
-                            due_date = '{$new_due_date}',
-                            checkout_patron_id = {$new_checkout_patron_id}
-                            WHERE id = {$this->getId()};");
+        if ($new_due_date == "zzz" && $new_checkout_patron_id == "zzz") {
+            $GLOBALS['DB']->exec("UPDATE book_list SET
+                                due_date = NULL,
+                                checkout_patron_id = NULL
+                                WHERE id = {$this->getId()};");
+        }
+        else {
+            $GLOBALS['DB']->exec("UPDATE book_list SET
+                                due_date = '{$new_due_date}',
+                                checkout_patron_id = {$new_checkout_patron_id}
+                                WHERE id = {$this->getId()};");
+        }
         $this->setDueDate($new_due_date);
         $this->setCheckoutPatronId($new_checkout_patron_id);
+
     }
 
     static function getAll(){
@@ -86,8 +95,8 @@ class BookList {
         else {
             $search_book_list = $GLOBALS['DB']->query("SELECT * FROM book_list WHERE {$column_id} = {$search_id}");
         }
-        $found_books = array();
         $found_book = $search_book_list->fetchAll(PDO::FETCH_ASSOC);
+        $found_books = array();
         foreach ($found_book as $book){
             $author_id = $book['author_id'];
             $book_id = $book['book_id'];

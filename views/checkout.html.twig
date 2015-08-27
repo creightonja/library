@@ -16,22 +16,33 @@
             <li role="presentation"><a href="/add">Add a Book/Patron</a></li>
         </ul>
 
-
-        <div class="form-group">
-            <form action='/booklist/{{book.getAuthorId}}/{{book.getId}}' method='post'>
-                <input name="_method" type="hidden" value="patch">
-                <input id="booklist_id" name="booklist_id" type="hidden" value="{{ book.getId }}">
-                <label for='due_date'>Due Date</label>
-                <input id='due_date' name='due_date' type='date'>
-                <label for="patron_id">Which Patron</label>
-                <select id='patron_id' name='patron_id' type='text'>
-                    {% for patron in patrons %}
-                        <option value="{{ patron.getId }}"> {{ patron.getPatronName }} </option>
-                    {% endfor %}
-                </select>
-                <button class="btn btn-default" type='submit'>Checkout</button>
-            </form>
-        </div>
+        {% if book.getDueDate is null %}
+            <div class="form-group">
+                <form action='/booklist/{{book.getAuthorId}}/{{book.getBookId}}' method='post'>
+                    <input name="_method" type="hidden" value="patch">
+                    <input id="booklist_id" name="booklist_id" type="hidden" value="{{ book.getId }}">
+                    <label for='due_date'>Due Date</label>
+                    <input id='due_date' name='due_date' type='date'>
+                    <label for="patron_id">Which Patron</label>
+                    <select id='patron_id' name='patron_id' type='text'>
+                        {% for patron in patrons %}
+                            <option value="{{ patron.getId }}"> {{ patron.getPatronName }} </option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-default" type='submit'>Checkout</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="form-group">
+                <form action='/booklist/{{book.getAuthorId}}/{{book.getBookId}}' method='post'>
+                    <input name="_method" type="hidden" value="patch">
+                    <input id="booklist_id" name="booklist_id" type="hidden" value="{{ book.getId }}">
+                    <input id='due_date' name='due_date' type='hidden' value="zzz">
+                    <input id='patron_id' name='patron_id' type='hidden' value="zzz">
+                    <button class="btn btn-default" type='submit'>Checkin</button>
+                </form>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>

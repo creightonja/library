@@ -165,8 +165,9 @@
 
     $app->patch("/booklist/{authorId}/{bookId}", function($authorId, $bookId) use ($app) {
         $update_book = BookList::find('id', $_POST['booklist_id']);
-        var_dump($update_book[0]);
-        $update_book[0]->update($_POST['due_date'], $_POST['patron_id']);
+        $due_date = $_POST['due_date'];
+        $patron_id = $_POST['patron_id'];
+        $update_book[0]->update($due_date, $patron_id);
         $author = Author::find($authorId);
         $author_id = $author->getId();
         $book = Book::find($bookId);
@@ -176,8 +177,8 @@
     });
 
     $app->get("booklist/{bookId}/out/", function ($bookId) use ($app) {
-        $column_id = 'book_id';
-        $books = BookList::find($column_id, $bookId);
+        $column_id = 'id';
+        $books = BookList::find($column_id, intval($bookId));
         $patrons = Patron::getAll();
         return $app['twig']->render('checkout.html.twig', array('book' => $books[0], 'patrons' => $patrons));
     });

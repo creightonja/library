@@ -19,7 +19,7 @@
                     {% if thebook.getDueDate is null %}
                         <li class="list-group-item"> Book Copy ID: {{ thebook.getId }}<span class="badge tc"><a href="/booklist/{{ thebook.getId }}/out/">Checkout</a></span></li>
                     {% else %}
-                        <li class="list-group-item"> Book Copy ID: {{ thebook.getId }} checked out.  It is due back on {{ thebook.getDueDate }}<span class="badge tc"><a href="/booklist/{{ thebook.getId }}/in/">Checkin</a></span></li>
+                        <li class="list-group-item"> Book Copy ID: {{ thebook.getId }} checked out.  It is due back on {{ thebook.getDueDate }}<span class="badge tc"><a href="/booklist/{{ thebook.getId }}/out/">Checkin</a></span></li>
                     {% endif %}
                 {% endfor %}
             </ul>
