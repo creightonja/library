@@ -14,7 +14,7 @@
                 <li role="presentation" class="active"><a href="/add">Add a Book/Patron</a></li>
             </ul>
             <div class="form-group">
-                <form action='/books' method='post'>
+                <form action='/addbookauthor' method='post'>
                     <label for='book_name'>Book Name</label>
                     <input id='book_name' name='book_name' type='text'>
                     <label for='author_name'>Author Name</label>
@@ -32,11 +32,6 @@
             </div>
                 <p><a href='/'>Home</a></p>
 
-                {% if patrons is not empty %}
-                    {% for patron in patrons %}
-                        {{ patron.getPatronName }}
-                    {% endfor %}
-                {% endif %}
         </div>
     </body>
 </html>

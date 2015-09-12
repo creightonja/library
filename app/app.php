@@ -15,19 +15,12 @@
     $app['debug'] = true;
 
     //PDO setup
-    $server = 'mysql:host=localhost;dbname=library';
-    $username = 'root';
-    $password = 'root';
-    $DB = new PDO($server, $username, $password);
-
-    //***************************************************************************
-    //***************************************************************************
-
-    //ATTN: OUR DATABASE LAYOUT IS A BIT DIFFERENT. PLEASE REFER TO THE PDF FILE
-    //NAMED "Database flowchart library.pdf" TO VIEW HOW IT IS LAID OUT.
-
-    //***************************************************************************
-    //***************************************************************************
+    $DB = new PDO('pgsql:host=localhost;dbname=library');
+    //Mysql database info
+    // $server = 'mysql:host=localhost;dbname=library';
+    // $username = 'root';
+    // $password = 'root';
+    // $DB = new PDO($server, $username, $password);
 
 
     //Patch and delete functions from symfony
@@ -45,7 +38,7 @@
         return $app['twig']->render('index.html.twig', array('authors' => Author::getAll(), 'books' => Book::getAll()));
     });
 
-    //---------------------Begin Book Search Functionality------------------
+    //---------------------Begin Book Functionality------------------
 
     //Books page, lists, add, edit, or delete a book links.
     $app->get("/books", function() use ($app) {
@@ -93,6 +86,16 @@
     $app->post("/delete_books", function() use ($app) {
         Book::deleteAll();
         return $app['twig']->render('index.html.twig');
+    });
+
+    //Add a book and associate an author
+    $app->post("/addbookauthor", function() use ($app) {
+      $book = new Book($_POST['book_name']);
+      $book->save();
+      $author = new Author($_POST['author_name']);
+      $author->save();
+      $author->addBook($book);
+      return $app['twig']->render('books.html.twig', array('books' => Book::getAll()));
     });
 
 // -------------------------End Book Routes -------------------------

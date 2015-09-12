@@ -24,7 +24,7 @@
         function save() {
             $statement = $GLOBALS['DB']->exec("INSERT INTO patrons (patron_name)
                     VALUES ('{$this->getPatronName()}');");
-            $this->id = $GLOBALS['DB']->lastInsertId();
+            $this->id = $GLOBALS['DB']->lastInsertId('patrons_id_seq');
         }
 
         function update ($new_patron_name) {

@@ -46,10 +46,10 @@ class BookList {
     }
 
     function save(){
-        $statement = $GLOBALS['DB']->exec("INSERT INTO book_list (author_id, book_id, due_date,
+        $query = $GLOBALS['DB']->exec("INSERT INTO book_list (author_id, book_id, due_date,
                     checkout_patron_id) VALUES ({$this->getAuthorId()}, {$this->getBookId()},
                     '{$this->getDueDate()}', {$this->getCheckoutPatronId()});");
-        $this->id = $GLOBALS['DB']->lastInsertId();
+        $this->id = $GLOBALS['DB']->lastInsertId('book_list_id_seq');
     }
 
     function update($new_due_date, $new_checkout_patron_id) {

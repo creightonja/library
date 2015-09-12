@@ -11,10 +11,11 @@
     require_once "src/BookList.php";
 
     //Setting server up to apache and mysql passwords.
-    $server = 'mysql:host=localhost;dbname=library_test';
-    $username = 'root';
-    $password = 'root';
-    $DB = new PDO($server, $username, $password);
+    $DB = new PDO('pgsql:host=localhost;dbname=library_test');
+    // $server = 'mysql:host=localhost;dbname=library_test';
+    // $username = 'root';
+    // $password = 'root';
+    // $DB = new PDO($server, $username, $password);
 
     class BookListTest extends PHPUnit_Framework_TestCase {
 
@@ -161,7 +162,7 @@
             $due_date = "2015-08-29";
             $id = 3;
             $checkout_patron_id = 1;
-            $test_book_list = new BookList($author_id, $book_id, $due_date, $checkout_patron_id, $id);
+            $test_book_list = new BookList($author_id, $book_id, $due_date, $checkout_patron_id);
             $test_book_list->save();
 
 

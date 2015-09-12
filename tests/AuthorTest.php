@@ -11,10 +11,11 @@
 
 
     //Setting server up to apache and mysql passwords.
-    $server = 'mysql:host=localhost;dbname=library_test';
-    $username = 'root';
-    $password = 'root';
-    $DB = new PDO($server, $username, $password);
+    $DB = new PDO('pgsql:host=localhost;dbname=library_test');
+    // $server = 'mysql:host=localhost;dbname=library_test';
+    // $username = 'root';
+    // $password = 'root';
+    // $DB = new PDO($server, $username, $password);
 
     class AuthorTest extends PHPUnit_Framework_TestCase {
 
@@ -75,8 +76,7 @@
         function test_save() {
             //Arrange
             $author_name = "Aristole";
-            $id = null;
-            $test_author = new Author($author_name, $id);
+            $test_author = new Author($author_name);
             $test_author->save();
 
             //Act

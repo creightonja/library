@@ -10,10 +10,11 @@
     require_once "src/Author.php";
 
     //Setting server up to apache and mysql passwords.
-    $server = 'mysql:host=localhost;dbname=library_test';
-    $username = 'root';
-    $password = 'root';
-    $DB = new PDO($server, $username, $password);
+    $DB = new PDO('pgsql:host=localhost;dbname=library_test');
+    // $server = 'mysql:host=localhost;dbname=library_test';
+    // $username = 'root';
+    // $password = 'root';
+    // $DB = new PDO($server, $username, $password);
 
     class BookTest extends PHPUnit_Framework_TestCase {
 

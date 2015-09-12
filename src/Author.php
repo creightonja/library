@@ -25,16 +25,16 @@
 
         function save() {
             $statement = $GLOBALS['DB']->exec("INSERT INTO authors (author_name)
-                    VALUES ('{$this->getAuthorName()}');");
-            $this->id = $GLOBALS['DB']->lastInsertId();
+                    VALUES ('{$this->getAuthorName()}') RETURNING id;");
+            $this->id = $GLOBALS['DB']->lastInsertId('authors_id_seq');
         }
 
         function getBooks() {
             $query = $GLOBALS['DB']->query("SELECT DISTINCT book_id FROM book_list WHERE
                                             author_id = {$this->getId()};");
-            $book_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+            // $book_ids = $query->fetchAll(PDO::FETCH_ASSOC);
             $books = Array();
-            foreach($book_ids as $id) {
+            foreach($query as $id) {
                 $book_id = $id['book_id'];
                 $result = $GLOBALS['DB']->query("SELECT * FROM books WHERE id = {$book_id};");
                 $returned_book = $result->fetchAll(PDO::FETCH_ASSOC);

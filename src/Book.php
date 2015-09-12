@@ -16,6 +16,10 @@ class Book {
         $this->book_name = $new_book_name;
     }
 
+    function setId($new_id){
+        $this->id = (int) $new_id;
+    }
+
     function getBookName(){
         return $this->book_name;
     }
@@ -51,9 +55,9 @@ class Book {
 
     //Save a book to books table:
     function save() {
-        $statement = $GLOBALS['DB']->exec("INSERT INTO books (book_name)
-                        VALUES ('{$this->getBookName()}');");
-        $this->id = $GLOBALS['DB']->lastInsertId();
+        $query = $GLOBALS['DB']->exec("INSERT INTO books (book_name)
+                        VALUES ('{$this->getBookName()}') RETURNING id;");
+        $this->id = $GLOBALS['DB']->lastInsertId('books_id_seq');
     }
 
     //change book name
