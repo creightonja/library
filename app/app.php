@@ -15,7 +15,9 @@
     $app['debug'] = true;
 
     //PDO setup
-    $DB = new PDO('pgsql:host=localhost;dbname=library');
+    $user = 'zffdjhjhbmbqvm';
+    $pass = '12AxQc_MA96c6ejgtLyNSfZaAm';
+    $DB = new PDO('pgsql:host=ec2-107-21-105-116.compute-1.amazonaws.com:5432;dbname=library;user=zffdjhjhbmbqvm;pass=12AxQc_MA96c6ejgtLyNSfZaAm');
     //Mysql database info
     // $server = 'mysql:host=localhost;dbname=library';
     // $username = 'root';
