@@ -2,8 +2,8 @@
     "require": {
         "phpunit/phpunit": "4.5.*",
         "silex/silex": "~1.1",
-        "twig/twig":"~1.0"
-
+        "twig/twig":"~1.0",
+        "herrera-io/silex-pdo": "1.*"
     },
     "require-dev": {
     "heroku/heroku-buildpack-php": "*"
