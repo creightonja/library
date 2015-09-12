@@ -15,7 +15,7 @@
     $app['debug'] = true;
 
     //PDO setup
-    $host = 'pgsql:host=ec2-107-21-105-116.compute-1.amazonaws.com:5432;dbname=dfsplu7v4em5bp';
+    $host = 'pgsql:ec2-107-21-105-116.compute-1.amazonaws.com;dbname=dfsplu7v4em5bp';
     $user = 'zffdjhjhbmbqvm';
     $pass = '12AxQc_MA96c6ejgtLyNSfZaAm';
     $DB = new PDO($host, $user, $pass);
