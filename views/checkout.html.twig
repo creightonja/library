@@ -2,6 +2,9 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/../main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <title>Library Database</title>
 </head>
 <body>
@@ -15,6 +18,9 @@
             <li role="presentation"><a href="/books">Book Search</a></li>
             <li role="presentation"><a href="/add">Add a Book/Patron</a></li>
         </ul>
+        <script>
+        $("#due_date").datepicker({dateFormat: "yy-mm-dd"}).datepicker("setDate", "+7");
+        </script>
 
         {% if book.getDueDate is null %}
             <div class="form-group">
@@ -23,6 +29,7 @@
                     <input id="booklist_id" name="booklist_id" type="hidden" value="{{ book.getId }}">
                     <label for='due_date'>Due Date</label>
                     <input id='due_date' name='due_date' type='date'>
+
                     <label for="patron_id">Which Patron</label>
                     <select id='patron_id' name='patron_id' type='text'>
                         {% for patron in patrons %}
